@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "flet-examples"
+version = "0.1.0"
+description = "Sample apps for Flet"
+authors = ["Appveyor Systems Inc. <hello@flet.dev>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+flet = "^0.28.3"
+flet-contrib = "^2023.8.9"
+ollama = "^0.5.1"
+libsql-experimental = "^0.0.54"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+flet = {extras = ["all"], version = "^0.28.3"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

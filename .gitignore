@@ -1,0 +1,8 @@
+env
+build
+dist
+storage
+temp
+__pycache__
+imo.db
+temp

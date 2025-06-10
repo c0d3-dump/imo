@@ -1,0 +1,3 @@
+libsql-experimental==0.0.54
+ollama==0.5.1
+flet==0.28.3
