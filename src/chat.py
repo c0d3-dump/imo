@@ -28,12 +28,10 @@ class Chat():
 
         history = config.db.get_history()
         for h in history:
-            self.page.pubsub.send_all(
-                Message(
-                    h['role'],
-                    h['message']
-                )
-            )
+            m = ChatMessage(self.page, Message(h['role'], h['message']))
+            self.chat.controls.append(m)
+
+        self.page.update()
 
     def text_field(self):
         return ft.TextField(
@@ -79,9 +77,8 @@ class Chat():
             self.page.pubsub.send_all(
                 Message(
                     self.page.client_storage.get("user_name"),
-                    self.new_message.value
+                    self.new_message.value,
                 ),
-                True
             )
             msg = self.new_message.value
             self.new_message.value = ""
@@ -100,13 +97,12 @@ class Chat():
                     "",
                     response,
                 ),
-                True
             )
 
             self.new_message.focus()
             self.page.update()
 
-    def on_message(self, message: Message, save_to_db: bool = False):
+    def on_message(self, message: Message):
         m = ChatMessage(self.page, message)
 
         self.chat.controls.append(m)
@@ -114,7 +110,6 @@ class Chat():
 
         # parse data to fetch only required info
 
-        if save_to_db:
-            config.db.save_history(message.user_name, text)
+        config.db.save_history(message.user_name, text)
 
         self.page.update()

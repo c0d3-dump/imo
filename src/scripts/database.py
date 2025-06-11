@@ -94,7 +94,7 @@ class Database():
     def get_history(self):
         result = self.conn.execute("""
           SELECT id, role, external_id, message
-            FROM history;
+            FROM history ORDER BY id;
         """).fetchall()
 
         return [

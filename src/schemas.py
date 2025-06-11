@@ -9,6 +9,7 @@ class Message:
         self.text = text
         self.text_stream = text_stream
 
+
 class ChatMessage(ft.Row):
     def __init__(self, page: ft.Page, message: Message):
         super().__init__()
@@ -42,7 +43,7 @@ class ChatMessage(ft.Row):
             d = chunk['message']['content']
             self.text.value += d
             self.page.update()
-        
+
         return self.text.value
 
     def get_initials(self, user_name: str):
