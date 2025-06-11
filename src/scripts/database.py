@@ -9,8 +9,8 @@ class Database():
 
     def init_db(self):
         self.conn.execute("""
-          CREATE TABLE IF NOT EXISTS 
-            files ( 
+          CREATE TABLE IF NOT EXISTS
+            files (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     file_name TEXT UNIQUE NOT NULL,
                     file_type TEXT NOT NULL,
@@ -19,19 +19,19 @@ class Database():
         """)
 
         self.conn.execute("""
-          CREATE TABLE IF NOT EXISTS 
-            vectors ( 
+          CREATE TABLE IF NOT EXISTS
+            vectors (
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       external_id INTEGER NOT NULL,
                       slug TEXT UNIQUE NOT NULL,
-                      embedding F32_BLOB(1024) NOT NULL,
+                      embedding F32_BLOB(768) NOT NULL,
                       FOREIGN KEY(external_id) REFERENCES files(id)
                     );
         """)
 
         self.conn.execute("""
-          CREATE TABLE IF NOT EXISTS 
-            history ( 
+          CREATE TABLE IF NOT EXISTS
+            history (
                       id INTEGER PRIMARY KEY AUTOINCREMENT,
                       role TEXT NOT NULL,
                       external_id INTEGER,
@@ -44,9 +44,9 @@ class Database():
           CREATE INDEX IF NOT EXISTS vector_idx ON vectors (libsql_vector_idx(embedding));
         """)
 
-    def save_file(self, file_name: str, file_type: Literal["txt", "img", "pdf"], flag: bool):
+    def save_file(self, file_name: str, file_type: Literal["text", "image"], flag: bool):
         self.conn.execute("""
-          INSERT INTO 
+          INSERT INTO
             files (file_name, file_type, flag)
               VALUES (?, ?, ?)
             ON CONFLICT (file_name) DO UPDATE
@@ -57,7 +57,7 @@ class Database():
 
         result = self.conn.execute("""
           SELECT id, file_name, file_type, flag
-            FROM files 
+            FROM files
             WHERE files.file_name = ? LIMIT 1;
         """, (file_name,)).fetchone()
 
@@ -67,6 +67,15 @@ class Database():
             "file_type": result[2],
             "flag": result[3],
         }
+
+    def update_file(self, file_name: str, flag: bool):
+        self.conn.execute("""
+          UPDATE files
+            SET flag = ?
+            WHERE file_name = ?
+        """, (flag, file_name))
+
+        self.conn.commit()
 
     def get_files(self):
         result = self.conn.execute("""

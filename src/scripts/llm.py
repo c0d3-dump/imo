@@ -1,20 +1,47 @@
+import requests
+from transformers import AutoProcessor, AutoModel
 from typing import List
 import ollama
+from PIL import Image
+import base64
 
 
 class LLM():
     def __init__(self):
         self.client = ollama.Client()
-        self.embedding_model_name = "mxbai-embed-large"
+        self.embedding_model_name = "nomic-embed-text"
         self.ai_model_name = "qwen3"
 
-    def embed_content(self, content: str) -> List[float]:
+    def embed_text(self, content: str) -> List[float]:
         result = self.client.embeddings(
             model=self.embedding_model_name,
-            prompt=content
+            prompt=content,
         )
 
         return result.embedding
+
+    def embed_image(self, file_path: str) -> List[str | List[float]]:
+        # Open and convert image to base64
+        with open(file_path, 'rb') as image_file:
+            image_data = base64.b64encode(image_file.read()).decode('utf-8')
+
+        # Get image description from the model
+        response = self.client.chat(
+            model="gemma3:4b",
+            messages=[
+                {
+                    'role': 'user',
+                    'content': "Describe this image in detail",
+                    'images': [image_data]
+                }
+            ]
+        )
+
+        # Extract the description from response
+        image_description = response['message']['content']
+
+        # Convert the description to vector embedding
+        return [image_description, self.embed_text(image_description)]
 
     def chat(self, query, context):
         PROMPT = f"""

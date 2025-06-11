@@ -2,6 +2,11 @@ import flet as ft
 
 from src.scripts import config
 
+FILE_TYPES = {
+    "text": ["txt", "pdf"],
+    "image": ["png", "jpg", "jpeg"]
+}
+
 
 class FolderSelector():
     def __init__(self, page: ft.Page):
@@ -42,14 +47,23 @@ class FolderSelector():
         print(files)
 
         for file in files:
-            saved_file = config.db.save_file(file, "txt", False)
+            file_extension = file.split('.')[-1].lower()
 
-            data = config.file.read_string(file)
+            if file_extension in FILE_TYPES["text"]:
+                saved_file = config.db.save_file(file, "text", False)
 
-            for txt in data.split("\n"):
-                vector = config.llm_model.embed_content(txt)
-                config.db.save_vector(saved_file['id'], txt, vector)
+                data = config.file.read_string(file)
+
+                for txt in data.split("\n"):
+                    vector = config.llm_model.embed_text(txt)
+                    config.db.save_vector(saved_file['id'], txt, vector)
+
+            elif file_extension in FILE_TYPES["image"]:
+                saved_file = config.db.save_file(file, "image", False)
+
+                res = config.llm_model.embed_image(file)
+                config.db.save_vector(saved_file['id'], res[0], res[1])
 
             print(f"embedding done :> {file}")
 
-            config.db.save_file(file, "txt", True)
+            config.db.update_file(file, True)

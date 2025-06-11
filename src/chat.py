@@ -85,7 +85,7 @@ class Chat():
             self.new_message.focus()
             self.page.update()
 
-            embeddings = config.llm_model.embed_content(msg)
+            embeddings = config.llm_model.embed_text(msg)
             context = config.db.search_vector(embeddings)
             context = "\n".join(
                 [f"vector_id: {ctx['id']} \nslug: {ctx['slug']}\n" for ctx in context])
