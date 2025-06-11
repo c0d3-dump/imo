@@ -12,10 +12,11 @@ flet = "^0.28.3"
 flet-contrib = "^2023.8.9"
 ollama = "^0.5.1"
 libsql-experimental = "^0.0.54"
+typer = "^0.16.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
-flet = {extras = ["all"], version = "^0.28.3"}
+flet = { extras = ["all"], version = "^0.28.3" }
 
 [build-system]
 requires = ["poetry-core"]

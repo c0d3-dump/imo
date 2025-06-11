@@ -16,6 +16,7 @@ class Chat():
         self.page.overlay.append(self.no_folder_alert)
 
         self.new_message = self.text_field()
+
         self.chat = ft.ListView(
             expand=True,
             spacing=10,
@@ -24,6 +25,15 @@ class Chat():
 
         self.chat_list()
         self.page.pubsub.subscribe(self.on_message)
+
+        history = config.db.get_history()
+        for h in history:
+            self.page.pubsub.send_all(
+                Message(
+                    h['role'],
+                    h['message']
+                )
+            )
 
     def text_field(self):
         return ft.TextField(
@@ -69,9 +79,9 @@ class Chat():
             self.page.pubsub.send_all(
                 Message(
                     self.page.client_storage.get("user_name"),
-                    self.new_message.value,
-                    "chat_message",
-                )
+                    self.new_message.value
+                ),
+                True
             )
             msg = self.new_message.value
             self.new_message.value = ""
@@ -88,21 +98,23 @@ class Chat():
                 Message(
                     "AI",
                     "",
-                    "chat_message",
                     response,
-                )
+                ),
+                True
             )
 
             self.new_message.focus()
             self.page.update()
 
-    def on_message(self, message: Message):
-        if message.message_type == "chat_message":
-            m = ChatMessage(self.page, message)
-        elif message.message_type == "login_message":
-            m = ft.Text(message.text, italic=True,
-                        color=ft.Colors.BLACK45, size=12)
+    def on_message(self, message: Message, save_to_db: bool = False):
+        m = ChatMessage(self.page, message)
 
         self.chat.controls.append(m)
-        m.stream_text()
+        text = m.stream_text()
+
+        # parse data to fetch only required info
+
+        if save_to_db:
+            config.db.save_history(message.user_name, text)
+
         self.page.update()

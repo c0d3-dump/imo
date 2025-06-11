@@ -40,13 +40,16 @@ class FolderSelector():
         base_folder = self.page.client_storage.get("base_folder")
         files = config.file.list_files(base_folder)
         print(files)
-        
+
         for file in files:
-          data = config.file.read_string(file)
+            saved_file = config.db.save_file(file, "txt", False)
 
-          for txt in data.split("\n"):
-            vector = config.llm_model.embed_content(txt)
-            config.db.save_vector(0, txt, vector)
+            data = config.file.read_string(file)
 
-          print(f"embedding done :> {file}")
-          
+            for txt in data.split("\n"):
+                vector = config.llm_model.embed_content(txt)
+                config.db.save_vector(saved_file['id'], txt, vector)
+
+            print(f"embedding done :> {file}")
+
+            config.db.save_file(file, "txt", True)

@@ -16,12 +16,6 @@ class File():
 
         return result
 
-    def read_json(self, file_path: str):
-        with open(file_path, 'r') as file:
-            content = file.read()
-
-        return json.loads(content)
-
     def read_string(self, file_path: str):
         with open(file_path, 'r') as file:
             content = file.read()
@@ -32,4 +26,7 @@ class File():
         pass
 
     def read_pdf(self, file_path: str):
+        pass
+
+    def read_img(self, file_path: str):
         pass

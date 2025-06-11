@@ -4,12 +4,10 @@ from ollama import ChatResponse
 
 
 class Message:
-    def __init__(self, user_name: str, text: str, message_type: str, text_stream: Optional[Iterator[ChatResponse]] = None):
+    def __init__(self, user_name: str, text: str, text_stream: Optional[Iterator[ChatResponse]] = None):
         self.user_name = user_name
         self.text = text
         self.text_stream = text_stream
-        self.message_type = message_type
-
 
 class ChatMessage(ft.Row):
     def __init__(self, page: ft.Page, message: Message):
@@ -38,12 +36,14 @@ class ChatMessage(ft.Row):
 
     def stream_text(self):
         if not self.message.text_stream:
-            return
+            return self.text.value
 
         for chunk in self.message.text_stream:
             d = chunk['message']['content']
             self.text.value += d
             self.page.update()
+        
+        return self.text.value
 
     def get_initials(self, user_name: str):
         if user_name:
