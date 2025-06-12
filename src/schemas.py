@@ -31,7 +31,7 @@ class ChatMessage(ft.Row):
                 ],
                 tight=True,
                 spacing=5,
-                width=800,
+                width=1160,
             ),
         ]
 

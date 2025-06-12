@@ -4,8 +4,10 @@ from src.chat import Chat
 from src.components.welcome_dialog import WelcomeDialog
 from src.components.folder_selector import FolderSelector
 
+
 def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.STRETCH
+    page.window.resizable = False
     page.title = "Vector Chat"
 
     # page.client_storage.clear()
@@ -15,7 +17,7 @@ def main(page: ft.Page):
         WelcomeDialog(page)
 
     FolderSelector(page)
-    
+
     Chat(page)
 
 

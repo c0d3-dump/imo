@@ -2,6 +2,7 @@ import flet as ft
 
 from src.schemas import Message
 
+
 class WelcomeDialog():
     def __init__(self, page: ft.Page):
         super().__init__()
@@ -36,12 +37,4 @@ class WelcomeDialog():
             self.page.client_storage.set(
                 "user_name", self.join_user_name.value)
             self.welcome_dlg.open = False
-            self.page.pubsub.send_all(
-                Message(
-                    user_name=self.join_user_name.value,
-                    text=f"{self.join_user_name.value} has joined the chat.",
-                    message_type="login_message",
-                )
-            )
-
             self.page.update()
