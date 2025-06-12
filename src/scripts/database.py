@@ -91,6 +91,18 @@ class Database():
                 "flag": r[3],
             } for r in result]
 
+    def get_file(self, file_id: int):
+        result = self.conn.execute("""
+          SELECT file_name, file_type
+            FROM files
+            WHERE id = ?;
+        """, (str(file_id),)).fetchone()
+
+        return {
+            "file_name": result[0],
+            "file_type": result[1],
+        }
+
     def save_history(self, role: str, message: str, external_id: Optional[int] = None):
         self.conn.execute("""
           INSERT INTO 

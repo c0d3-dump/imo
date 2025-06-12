@@ -31,7 +31,11 @@ class LLM():
             messages=[
                 {
                     'role': 'user',
-                    'content': "Describe this image in detail",
+                    'content': """
+                        Describe this image with all distinct features, colors and other important details.
+                        Make sure to give description in maximum 50 words and single line containing all important details.
+                        Do not add extra commentry at beginning or end.
+                      """,
                     'images': [image_data]
                 }
             ]
