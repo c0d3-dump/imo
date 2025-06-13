@@ -1,6 +1,7 @@
-from typing import Iterator, List, Literal, Optional
+from typing import Iterator, List, Optional
 import flet as ft
 from ollama import ChatResponse
+from src.scripts import config
 
 
 class Message:
@@ -19,6 +20,7 @@ class ChatMessage(ft.Row):
         self.vertical_alignment = ft.CrossAxisAlignment.START
         self.text = message.text
 
+        self.docs = ft.Column()
         res_text = self.split_text()
         self.thinking = ft.Text(res_text[0], color=ft.Colors.GREY_500)
         self.response = ft.Text(res_text[1], selectable=True)
@@ -37,7 +39,8 @@ class ChatMessage(ft.Row):
                         ft.ListTile(title=self.thinking, dense=True),
                     ],
                 ),
-                self.response
+                self.response,
+                self.docs
             ]
         else:
             msg = [
@@ -59,12 +62,39 @@ class ChatMessage(ft.Row):
             ),
         ]
 
+    def set_document(self, external_id: str):
+        file = config.db.get_file_by_id(int(external_id))
+
+        if file['file_type'] == 'image' and len(self.docs.controls) < 1:
+            self.docs.controls.append(
+                ft.Image(
+                    src=file['file_name'],
+                    width=200,
+                    height=200,
+                    fit=ft.ImageFit.COVER,
+                    repeat=ft.ImageRepeat.NO_REPEAT,
+                    border_radius=ft.border_radius.all(10),
+                )
+            )
+
     def split_text(self) -> List[str]:
         if "<think>" in self.text:
             txt = self.text.split("<think>")[1].strip()
             if "</think>" in txt:
                 txt = txt.split("</think>")
-                return [txt[0].strip(), txt[1].strip()]
+
+                if "response: " not in txt[1]:
+                    return [txt[0].strip(), ""]
+
+                res = txt[1].strip().split("external_id: ")[1]
+                res2 = res.split("\nresponse: ")
+
+                external_id = res2[0].strip()
+
+                if external_id != "-1":
+                    self.set_document(external_id)
+
+                return [txt[0].strip(), res2[1].strip()]
 
             return [txt.strip(), ""]
         return ["", self.text.strip()]
@@ -83,7 +113,7 @@ class ChatMessage(ft.Row):
 
             self.page.update()
 
-        return self.response.value
+        return self.text
 
     def get_initials(self, user_name: str) -> str:
         if user_name:

@@ -108,8 +108,6 @@ class Chat():
         self.chat.controls.append(m)
         text = m.stream_text()
 
-        # parse data to fetch only required info
-
         config.db.save_history(message.user_name, text)
 
         self.page.update()

@@ -44,7 +44,6 @@ class FolderSelector():
     def refresh_files(self, e):
         base_folder = self.page.client_storage.get("base_folder")
         files = config.file.list_files(base_folder)
-        print(files)
 
         for file in files:
             file_extension = file.split('.')[-1].lower()
@@ -59,11 +58,14 @@ class FolderSelector():
                     config.db.save_vector(saved_file['id'], txt, vector)
 
             elif file_extension in FILE_TYPES["image"]:
-                saved_file = config.db.save_file(file, "image", False)
+                try:
+                    config.db.get_file_by_name(file)
+                except:
+                    saved_file = config.db.save_file(file, "image", False)
 
-                res = config.llm_model.embed_image(file)
-                config.db.save_vector(saved_file['id'], res[0], res[1])
+                    res = config.llm_model.embed_image(file)
+                    config.db.save_vector(saved_file['id'], res[0], res[1])
 
-            print(f"embedding done :> {file}")
+            self.page.open(ft.SnackBar(ft.Text(f"Embedding done :> {file}"), show_close_icon=True))
 
             config.db.update_file(file, True)

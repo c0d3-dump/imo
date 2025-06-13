@@ -38,7 +38,11 @@ class LLM():
                       """,
                     'images': [image_data]
                 }
-            ]
+            ],
+            options={
+                "temperature": 0,
+                "seed": 2025
+            }
         )
 
         # Extract the description from response

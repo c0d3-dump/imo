@@ -91,16 +91,29 @@ class Database():
                 "flag": r[3],
             } for r in result]
 
-    def get_file(self, file_id: int):
+    def get_file_by_id(self, file_id: int):
         result = self.conn.execute("""
           SELECT file_name, file_type
             FROM files
-            WHERE id = ?;
+            WHERE id = ? AND flag = 1;
         """, (str(file_id),)).fetchone()
 
         return {
             "file_name": result[0],
             "file_type": result[1],
+        }
+
+    def get_file_by_name(self, file_name: str):
+        result = self.conn.execute("""
+          SELECT id, file_name, file_type
+            FROM files
+            WHERE file_name = ? AND flag = 1;
+        """, (file_name,)).fetchone()
+
+        return {
+            "file_id": result[0],
+            "file_name": result[1],
+            "file_type": result[2],
         }
 
     def save_history(self, role: str, message: str, external_id: Optional[int] = None):
