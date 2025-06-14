@@ -2,6 +2,7 @@ from typing import Iterator, List, Optional
 import flet as ft
 from ollama import ChatResponse
 from src.scripts import config
+import webbrowser
 
 
 class Message:
@@ -39,8 +40,8 @@ class ChatMessage(ft.Row):
                         ft.ListTile(title=self.thinking, dense=True),
                     ],
                 ),
+                self.docs,
                 self.response,
-                self.docs
             ]
         else:
             msg = [
@@ -65,7 +66,10 @@ class ChatMessage(ft.Row):
     def set_document(self, external_id: str):
         file = config.db.get_file_by_id(int(external_id))
 
-        if file['file_type'] == 'image' and len(self.docs.controls) < 1:
+        if len(self.docs.controls) > 0:
+            return
+
+        if file['file_type'] == 'image':
             self.docs.controls.append(
                 ft.Image(
                     src=file['file_name'],
@@ -76,6 +80,18 @@ class ChatMessage(ft.Row):
                     border_radius=ft.border_radius.all(10),
                 )
             )
+        else:
+            self.docs.controls.append(
+                ft.ElevatedButton(
+                    text=file['file_name'].split("/")[-1],
+                    on_click=lambda _: self.open_file_in_browser(
+                        file["file_name"]),
+                )
+            )
+
+    def open_file_in_browser(self, file_path: str):
+        file_url = f"file://{file_path}"
+        webbrowser.open(file_url)
 
     def split_text(self) -> List[str]:
         if "<think>" in self.text:

@@ -55,6 +55,7 @@ class LLM():
         PROMPT = f"""
           Answer user question based on given context.
           Just answer from context and if there is no information found in context then say i'm sorry i cannot find that information with external_id: -1.
+          Also make sure to not mention vector_id, external_id and or context in response.
 
           query:
             {query}

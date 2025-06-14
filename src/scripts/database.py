@@ -158,3 +158,17 @@ class Database():
         """, (str(embedding),)).fetchall()
 
         return [{"id": r[0], "slug": r[1]} for r in result]
+
+    def delete_vector_by_file_name(self, file_name: str):
+        result = self.conn.execute("""
+          SELECT id
+            FROM files
+            WHERE file_name = ?;
+        """, (file_name,)).fetchone()
+
+        self.conn.execute("""
+          DELETE FROM vectors
+            WHERE get_file_by_name
+        """, (str(result[0]),))
+
+        self.conn.commit()
