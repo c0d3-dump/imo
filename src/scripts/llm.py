@@ -1,8 +1,5 @@
-import requests
-from transformers import AutoProcessor, AutoModel
 from typing import List
 import ollama
-from PIL import Image
 import base64
 
 
