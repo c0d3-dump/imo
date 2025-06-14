@@ -1,23 +1,17 @@
-[tool.poetry]
-name = "flet-examples"
+[project]
+name = "VectorChat"
 version = "0.1.0"
-description = "Sample apps for Flet"
-authors = ["Appveyor Systems Inc. <hello@flet.dev>"]
+description = "Chat with local files"
+authors = [{ name = "Bhavin Sojitra", email = "c0d3.dump@gmail.com" }]
 license = "Apache-2.0"
 readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "libsql-experimental==0.0.54",
+  "ollama==0.5.1",
+  "flet==0.28.3",
+  "PyMuPDF==1.26.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.13"
-flet = "^0.28.3"
-flet-contrib = "^2023.8.9"
-ollama = "^0.5.1"
-libsql-experimental = "^0.0.54"
-typer = "^0.16.0"
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-flet = { extras = ["all"], version = "^0.28.3" }
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.flet]
+build_bumber = 1
