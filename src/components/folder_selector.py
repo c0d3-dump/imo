@@ -17,7 +17,7 @@ class FolderSelector():
         page.overlay.append(directory_picker)
 
         base_folder = self.page.client_storage.get("base_folder")
-        self.selected_folder = ft.Text(base_folder.split("/")[-1])
+        self.selected_folder = ft.Text(base_folder)
         self.file_processing = ft.Text("")
 
         page.add(
