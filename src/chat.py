@@ -88,7 +88,7 @@ class Chat():
             embeddings = config.llm_model.embed_text(msg)
             context = config.db.search_vector(embeddings)
             context = "\n".join(
-                [f"vector_id: {ctx['id']} \nslug: {ctx['slug']}\n" for ctx in context])
+                [f"external_id: {ctx['id']} \nslug: {ctx['slug']}\n" for ctx in context])
             response = config.llm_model.chat(msg, context)
 
             self.page.pubsub.send_all(
