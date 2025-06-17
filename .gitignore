@@ -8,3 +8,5 @@ imo.db
 temp
 .flatpak-builder
 build-dir
+repo
+vectorchat.flatpak
