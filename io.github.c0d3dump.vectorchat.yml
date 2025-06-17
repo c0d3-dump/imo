@@ -1,0 +1,30 @@
+app-id: io.github.c0d3dump.vectorchat
+runtime: org.freedesktop.Platform
+runtime-version: '24.08' 
+sdk: org.freedesktop.Sdk
+
+command: vectorchat
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=x11 
+  - --device=dri
+  - --share=network
+
+modules:
+  - name: vectorchat
+    buildsystem: simple
+    build-commands:
+      - install -d /app/bin
+      - cp -a build/linux/* /app/bin/
+
+      - install -Dm644 icons/io.github.c0d3dump.vectorchat.png /app/share/icons/hicolor/scalable/apps/io.github.c0d3dump.vectorchat.png
+      
+      - install -Dm644 io.github.c0d3dump.vectorchat.appdata.xml /app/share/appdata/io.github.c0d3dump.vectorchat.appdata.xml
+      
+      - install -Dm644 io.github.c0d3dump.vectorchat.desktop /app/share/applications/io.github.c0d3dump.vectorchat.desktop
+  
+    sources:
+      - type: dir
+        path: .

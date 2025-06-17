@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.c0d3dump.vectorchat</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Vector Chat</name>
+  <summary>A cool app built with Flet and Python</summary>
+  <description>
+    <p>
+      This is a longer description of my Flet application. It explains what the app does and why it is useful.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.c0d3dump.vectorchat.desktop</launchable>
+  <!-- <screenshots> -->
+    <!-- <screenshot type="default">
+      <image>https://raw.githubusercontent.com/c0d3dump.vectorchat/main/screenshot.png</image>
+    </screenshot> -->
+  <!-- </screenshots> -->
+  <url type="homepage">https://github.com/c0d3dump/imo</url>
+  <developer_name>Your Name</developer_name>
+</component>

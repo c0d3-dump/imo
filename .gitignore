@@ -6,3 +6,5 @@ temp
 __pycache__
 imo.db
 temp
+.flatpak-builder
+build-dir
