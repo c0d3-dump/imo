@@ -22,18 +22,6 @@ flatpak install vectorchat.flatpak
 
 # build from source
 
-### install dependencies
-
-```sh
-pip3 install -r requirements.txt
-```
-
-### build for linux
-
-```sh
-flet build linux
-```
-
 ### build flatpak
 
 ```sh

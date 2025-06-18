@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=vectorchat
-Exec=vectorchat
+Exec=run.sh
 Icon=io.github.c0d3dump.vectorchat
 Type=Application
 Categories=Utility;

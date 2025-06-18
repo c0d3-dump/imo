@@ -5,13 +5,16 @@ description = "Chat with local files"
 authors = [{ name = "Bhavin Sojitra", email = "c0d3.dump@gmail.com" }]
 license = "Apache-2.0"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
   "libsql-experimental==0.0.54",
   "ollama==0.5.1",
-  "flet==0.28.3",
+  "flet[all]==0.28.3",
   "PyMuPDF==1.26.1",
 ]
 
 [tool.flet]
 build_bumber = 1
+
+[project.scripts]
+vectorchat = "vectorchat.main:start"

@@ -1,10 +1,20 @@
+import os
+from pathlib import Path
 from typing import Literal, Optional
 import libsql_experimental as libsql
 
 
 class Database():
     def __init__(self):
-        self.conn = libsql.connect("imo.db")
+        data_home = Path(os.environ.get('XDG_DATA_HOME', '~/.local/share')).expanduser()
+        
+        app_data_dir = data_home / 'vectorchat'
+        
+        app_data_dir.mkdir(parents=True, exist_ok=True)
+      
+        db_path = app_data_dir / 'imo.db'
+        
+        self.conn = libsql.connect(str(db_path))
         self.init_db()
 
     def init_db(self):
