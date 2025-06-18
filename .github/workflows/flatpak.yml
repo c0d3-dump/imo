@@ -1,0 +1,33 @@
+name: flatpak
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flatpak
+        uses: flatpak/flatpak-github-actions/setup-flatpak@v5
+        with:
+          cache-key: flatpak-cache-${{ runner.os }}
+
+      - name: Build the Flatpak
+        run: |
+          flatpak-builder --force-clean --repo=repo build-dir io.github.c0d3dump.vectorchat.yml
+
+      - name: Create a bundle
+        run: |
+          flatpak build-bundle repo vectorchat.flatpak io.github.c0d3dump.vectorchat
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vectorchat-flatpak
+          path: vectorchat.flatpak
