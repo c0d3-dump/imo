@@ -19,7 +19,6 @@ jobs:
           bundle: vectorchat.flatpak
           manifest-path: io.github.c0d3dump.vectorchat.yml
           cache-key: flatpak-builder-${{ github.sha }}
-          arch: ${{ matrix.arch }}
           verbose: true
       
       # - name: Build the Flatpak
