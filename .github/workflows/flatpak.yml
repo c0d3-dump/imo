@@ -20,17 +20,3 @@ jobs:
           manifest-path: io.github.c0d3dump.vectorchat.yml
           cache-key: flatpak-builder-${{ github.sha }}
           verbose: true
-      
-      # - name: Build the Flatpak
-      #   run: |
-      #     flatpak-builder --force-clean --repo=repo build-dir io.github.c0d3dump.vectorchat.yml
-
-      # - name: Create a bundle
-      #   run: |
-      #     flatpak build-bundle repo vectorchat.flatpak io.github.c0d3dump.vectorchat
-
-      # - name: Upload a Build Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: vectorchat-flatpak
-      #     path: vectorchat.flatpak
