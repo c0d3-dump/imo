@@ -9,14 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Flatpak
-        uses: flatpak/flatpak-github-actions/setup-flatpak@v5
+      - uses: actions/checkout@v4
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          cache-key: flatpak-cache-${{ runner.os }}
+          bundle: palette.flatpak
+          manifest-path: org.gnome.zbrown.Palette.yml
+          cache-key: flatpak-builder-${{ github.sha }}
 
       - name: Build the Flatpak
         run: |
